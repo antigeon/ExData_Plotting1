@@ -24,6 +24,7 @@ plot(time,m1,type="n",ylab = "Energy sub metering",xlab = "")
 lines(time,m1,col="black")
 lines(time,m2,col="red")
 lines(time,m3,col="blue")
+legend("topright",legend = c("sub_metering_1","sub_metering_2","sub_metering_3"),lwd=1,col =c("black","red","blue"),bty = "n")
 #5 save the image
 dev.copy(png,"plot3.png")
 dev.off()
