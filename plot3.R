@@ -1,0 +1,29 @@
+#1Download data
+filename<-"week1pro.zip"
+if (!file.exists("household_power_consumption.txt")){
+    fileURL <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+    download.file(fileURL, filename)
+}  
+if (!file.exists("household_power_consumption.txt")) {
+    unzip(filename) 
+}
+#2 read the file and subset useful data
+data<-read.table("household_power_consumption.txt",sep = ";")
+name<-c("Date", "Time","Global_active_power", "Global_reactive_power", "Voltage", "Global_intensity","Sub_metering_1", "Sub_metering_2","Sub_metering_3")
+colnames(data)<-name
+useful<-subset(data,Date %in% c("1/2/2007","2/2/2007"))
+#3 transform data into suitable date type.
+m1<-as.numeric(levels(useful$Sub_metering_1))[useful$Sub_metering_1]
+m2<-as.numeric(levels(useful$Sub_metering_2))[useful$Sub_metering_2]
+m3<-as.numeric(levels(useful$Sub_metering_3))[useful$Sub_metering_3]
+library(lubridate)
+Date<-dmy(useful$Date)
+time<-strptime(paste(Date,useful$Time),"%Y-%m-%d %H:%M:%S")
+#4plot
+plot(time,m1,type="n",ylab = "Energy sub metering",xlab = "")
+lines(time,m1,col="black")
+lines(time,m2,col="red")
+lines(time,m3,col="blue")
+#5 save the image
+dev.copy(png,"plot3.png")
+dev.off()
